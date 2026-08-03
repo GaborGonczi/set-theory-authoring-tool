@@ -31,14 +31,14 @@ class AuthController
 
     public function register(RegisterRequest $request) {
         $params=$request->validated();
-        if(User::where('name',$params['username'])->exists()){
+        if(User::where('username',$params['username'])->exists()){
             return response()->json([
                 'message'=>'A felhasználónév foglalt'
             ],409);
         }
         
         $user=User::create([
-            'name'=>$params['username'],
+            'username'=>$params['username'],
             'password'=>Hash::make($params['password'])
         ]);
 
