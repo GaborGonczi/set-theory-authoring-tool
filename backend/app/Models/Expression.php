@@ -21,7 +21,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 ])]
 class Expression extends Model
 {
-    use SoftDeletes;
 
     public function getLengthAttribute()
     {

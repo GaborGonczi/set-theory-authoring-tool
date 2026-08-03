@@ -16,7 +16,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 ])]
 class Variable extends Model
 {
-    use SoftDeletes;
     public function file(): BelongsTo
     {
         return $this->belongsTo(File::class);
