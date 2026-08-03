@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
+            $table->dropUnique('users_email_unique');
             $table->dropColumn('email', 'email_verified_at', 'remember_token');
             $table->timestamp('deleted_at')->nullable();
             $table->renameColumn('name', 'username');
