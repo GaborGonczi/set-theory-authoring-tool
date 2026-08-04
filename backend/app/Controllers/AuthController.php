@@ -42,7 +42,7 @@ class AuthController
             'password'=>Hash::make($params['password'])
         ]);
 
-        $this->attemptWithCredentials($params);
+        return $this->attemptWithCredentials($params);
 
     }
 
