@@ -1,0 +1,674 @@
+{
+    "readme": "Listed status codes cover business-logic-specific responses only; additional status codes may apply as defined in the statuses section.",
+    "statuses": {
+        "401": "Unauthorized",
+        "403": "Forbidden",
+        "404": "Not Found",
+        "405": "Method Not Allowed",
+        "422": "Unprocessable Content",
+        "429": "Too Many Requests",
+        "500": "Internal Server Error",
+        "503": "Service Unavailable"
+    },
+    "collection": {
+        "auth": {
+            "login": {
+                "url": "{{env.baseurl}}/auth/login",
+                "headers": [
+                    {
+                        "name": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "schema": {
+                        "fields": {
+                            "username": {
+                                "type": "string",
+                                "required": true
+                            },
+                            "password": {
+                                "type": "string",
+                                "required": true
+                            }
+                        }
+                    }
+                },
+                "response": {
+                    "success": {
+                        "headers": [
+                            {
+                                "name": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "code": [
+                            200
+                        ],
+                        "schema": {
+                            "fields": {
+                                "access_token": {
+                                    "type": "string"
+                                },
+                                "token_type": {
+                                    "type": "string"
+                                },
+                                "expires_in": {
+                                    "type": "number"
+                                },
+                                "user": {
+                                    "type": "object<User>"
+                                }
+                            }
+                        }
+                    },
+                    "error": {
+                        "headers": [
+                            {
+                                "name": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "code": [
+                            401
+                        ],
+                        "schema": {
+                            "fields": {
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "register": {
+                "url": "{{env.baseurl}}/auth/register",
+                "headers": [
+                    {
+                        "name": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "schema": {
+                        "fields": {
+                            "username": {
+                                "type": "string",
+                                "required": true,
+                                "pattern": "^[a-z][a-z0-9]{2,14}$"
+                            },
+                            "password": {
+                                "type": "string",
+                                "required": true,
+                                "pattern": "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-+]).+$"
+                            },
+                            "password_confirmation": {
+                                "type": "password_confirmation",
+                                "required": true
+                            }
+                        }
+                    }
+                },
+                "response": {
+                    "success": {
+                        "headers": [
+                            {
+                                "name": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "code": [
+                            200
+                        ],
+                        "schema": {
+                            "fields": {
+                                "access_token": {
+                                    "type": "string"
+                                },
+                                "token_type": {
+                                    "type": "string"
+                                },
+                                "expires_in": {
+                                    "type": "number"
+                                },
+                                "user": {
+                                    "type": "object<User>"
+                                }
+                            }
+                        }
+                    },
+                    "error": {
+                        "headers": [
+                            {
+                                "name": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "code": [
+                            409
+                        ],
+                        "schema": {
+                            "fields": {
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "logout": {
+                "url": "{{env.baseurl}}/auth/logout",
+                "headers": [
+                    {
+                        "name": "Authorization",
+                        "value": "Bearer {{env.token}}"
+                    },
+                    {
+                        "name": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "schema": {
+                        "fields": {}
+                    }
+                },
+                "response": {
+                    "success": {
+                        "headers": [
+                            {
+                                "name": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "code": [
+                            200
+                        ],
+                        "schema": {
+                            "fields": {
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "expression": {
+            "evaluate": {
+                "url": "{{env.baseurl}}/expression/evaluate",
+                "headers": [
+                    {
+                        "name": "Authorization",
+                        "value": "Bearer {{env.token}}"
+                    },
+                    {
+                        "name": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "schema": {
+                        "fields": {
+                            "source": {
+                                "type": "string",
+                                "required": true
+                            },
+                            "fileId": {
+                                "type": "number",
+                                "required": false,
+                                "exclusiveWith": "expressionId"
+                            },
+                            "expressionId": {
+                                "type": "number",
+                                "required": false,
+                                "exclusiveWith": "fileId"
+                            }
+                        }
+                    }
+                },
+                "response": {
+                    "success": {
+                        "headers": [
+                            {
+                                "name": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "code": [
+                            200
+                        ],
+                        "schema": {
+                            "fields": {
+                                "expression": {
+                                    "type": "object<Expression>"
+                                }
+                            }
+                        }
+                    },
+                    "error": {
+                        "headers": [
+                            {
+                                "name": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "code": [
+                            400,
+                            404
+                        ],
+                        "schema": {
+                            "fields": {
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "file": {
+            "get_my_files": {
+                "url": "{{env.baseurl}}/file/get_my_files",
+                "headers": [
+                    {
+                        "name": "Authorization",
+                        "value": "Bearer {{env.token}}"
+                    },
+                    {
+                        "name": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "schema": {
+                        "fields": {}
+                    }
+                },
+                "response": {
+                    "success": {
+                        "headers": [
+                            {
+                                "name": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "code": [
+                            200
+                        ],
+                        "schema": {
+                            "fields": {
+                                "files": {
+                                    "type": "array<object<File>>"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get_examples_by_others": {
+                "url": "{{env.baseurl}}/file/get_examples_by_others",
+                "headers": [
+                    {
+                        "name": "Authorization",
+                        "value": "Bearer {{env.token}}"
+                    },
+                    {
+                        "name": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "schema": {
+                        "fields": {}
+                    }
+                },
+                "response": {
+                    "success": {
+                        "headers": [
+                            {
+                                "name": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "code": [
+                            200
+                        ],
+                        "schema": {
+                            "fields": {
+                                "files": {
+                                    "type": "array<object<File>>"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "copy": {
+                "url": "{{env.baseurl}}/file/copy",
+                "headers": [
+                    {
+                        "name": "Authorization",
+                        "value": "Bearer {{env.token}}"
+                    },
+                    {
+                        "name": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "schema": {
+                        "fields": {
+                            "fileId": {
+                                "type": "number",
+                                "required": true
+                            }
+                        }
+                    }
+                },
+                "response": {
+                    "success": {
+                        "headers": [
+                            {
+                                "name": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "code": [
+                            201
+                        ],
+                        "schema": {
+                            "fields": {
+                                "fileId": {
+                                    "type": "number"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "import": {
+                "url": "{{env.baseurl}}/file/import",
+                "headers": [
+                    {
+                        "name": "Authorization",
+                        "value": "Bearer {{env.token}}"
+                    },
+                    {
+                        "name": "Content-Type",
+                        "value": "multipart/form-data"
+                    }
+                ],
+                "body": {
+                    "schema": {
+                        "fields": {
+                            "file": {
+                                "required": true,
+                                "type": "file"
+                            }
+                        }
+                    }
+                },
+                "response": {
+                    "success": {
+                        "headers": [
+                            {
+                                "name": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "code": [
+                            201
+                        ],
+                        "schema": {
+                            "fields": {
+                                "fileId": {
+                                    "type": "number"
+                                }
+                            }
+                        }
+                    },
+                    "error": {
+                        "headers": [
+                            {
+                                "name": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "code": [
+                            400
+                        ],
+                        "schema": {
+                            "fields": {
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "export": {
+                "url": "{{env.baseurl}}/file/export",
+                "headers": [
+                    {
+                        "name": "Authorization",
+                        "value": "Bearer {{env.token}}"
+                    },
+                    {
+                        "name": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "schema": {
+                        "fields": {
+                            "fileId": {
+                                "type": "number",
+                                "required": true
+                            }
+                        }
+                    }
+                },
+                "response": {
+                    "success": {
+                        "headers": [
+                            {
+                                "name": "Content-Type",
+                                "value": "text/plain"
+                            }
+                        ],
+                        "code": [
+                            200
+                        ],
+                        "schema": {
+                            "fields": {
+                                "file": {
+                                    "type": "file"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "open": {
+                "url": "{{env.baseurl}}/file/open",
+                "headers": [
+                    {
+                        "name": "Authorization",
+                        "value": "Bearer {{env.token}}"
+                    },
+                    {
+                        "name": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "schema": {
+                        "fields": {
+                            "fileId": {
+                                "type": "number",
+                                "required": true
+                            }
+                        }
+                    }
+                },
+                "response": {
+                    "success": {
+                        "headers": [
+                            {
+                                "name": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "code": [
+                            200
+                        ],
+                        "schema": {
+                            "fields": {
+                                "file": {
+                                    "type": "object<File>"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "update_example": {
+                "url": "{{env.baseurl}}/file/update_example",
+                "headers": [
+                    {
+                        "name": "Authorization",
+                        "value": "Bearer {{env.token}}"
+                    },
+                    {
+                        "name": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "schema": {
+                        "fields": {
+                            "fileId": {
+                                "type": "number",
+                                "required": true
+                            },
+                            "example": {
+                                "type": "boolean",
+                                "required": true
+                            }
+                        }
+                    }
+                },
+                "response": {
+                    "success": {
+                        "headers": [
+                            {
+                                "name": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "code": [
+                            200
+                        ],
+                        "schema": {
+                            "fields": {
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "help": {
+            "usage": {
+                "url": "{{env.baseurl}}/help/usage",
+                "headers": [
+                    {
+                        "name": "Authorization",
+                        "value": "Bearer {{env.token}}"
+                    },
+                    {
+                        "name": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "schema": {
+                        "fields": {}
+                    }
+                },
+                "response": {
+                    "success": {
+                        "headers": [
+                            {
+                                "name": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "code": [
+                            200
+                        ],
+                        "schema": {
+                            "fields": {
+                                "usage": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "profile": {
+            "info": {
+                "url": "{{env.baseurl}}/profile/info",
+                "headers": [
+                    {
+                        "name": "Authorization",
+                        "value": "Bearer {{env.token}}"
+                    },
+                    {
+                        "name": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "schema": {
+                        "fields": {}
+                    }
+                },
+                "response": {
+                    "success": {
+                        "headers": [
+                            {
+                                "name": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "code": [
+                            200
+                        ],
+                        "schema": {
+                            "fields": {
+                                "user": {
+                                    "type": "object<User>"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "env": {
+        "baseurl": "http://localhost:8000/api",
+        "token": "jwt"
+    }
+}
