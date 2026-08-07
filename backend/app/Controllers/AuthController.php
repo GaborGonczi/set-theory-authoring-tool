@@ -56,13 +56,13 @@ class AuthController
             'token_type'   => 'bearer',
             'expires_in'   => $this->guard->factory()->getTTL() * 60,
             'user'=>$this->guard->user()
-        ]);
+        ],200);
     }
 
     protected function attemptWithCredentials($credentials=[]) {
           if(!$token=$this->guard->attempt($credentials)){
             return response()->json(
-                ['message'=>'Nem megfelelő belépési adatok.']
+                ['message'=>'Nem megfelelő belépési adatok.'],401
             );
         }
         return $this->respondWithToken($token) ;
