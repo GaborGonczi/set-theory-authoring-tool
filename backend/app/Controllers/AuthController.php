@@ -25,7 +25,10 @@ class AuthController
 
     public function logout() {
       
-        return $this->guard->logout();
+        $this->guard->logout();
+        return response()->json(
+            ['message'=>'Sikeres kijelentkezés.'],200
+        );
 
     }
 
