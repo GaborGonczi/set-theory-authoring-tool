@@ -584,6 +584,49 @@
                         }
                     }
                 }
+            },
+            "delete": {
+                "url": "{{env.baseurl}}/file/delete",
+                "headers": [
+                    {
+                        "name": "Authorization",
+                        "value": "Bearer {{env.token}}"
+                    },
+                    {
+                        "name": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "schema": {
+                        "fields": {
+                            "fileId": {
+                                "type": "number",
+                                "required": true
+                            }
+                        }
+                    }
+                },
+                "response": {
+                    "success": {
+                        "headers": [
+                            {
+                                "name": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "code": [
+                            200
+                        ],
+                        "schema": {
+                            "fields": {
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
         "help": {
