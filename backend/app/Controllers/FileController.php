@@ -17,7 +17,13 @@ class FileController
         );
     }
 
-    
-
-
+    public function get_examples_by_others(Request $request)
+    {
+        $user= $request->user();
+        $objects=File::where('user_id','<>',$user->id)->where('example','=',true)->whereNull('deleted_at')->get();
+        
+        return response()->json(
+            ['files'=>$objects],200
+        );
+    }
 }
