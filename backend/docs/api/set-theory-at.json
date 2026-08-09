@@ -573,10 +573,13 @@
                             }
                         ],
                         "code": [
-                            200
+                            200,404
                         ],
                         "schema": {
                             "fields": {
+                                "file":{
+                                    "type":"object<File>"
+                                },
                                 "message": {
                                     "type": "string"
                                 }
