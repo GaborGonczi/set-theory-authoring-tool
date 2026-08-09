@@ -28,12 +28,12 @@ class File extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function expression(): HasMany
+    public function expressions(): HasMany
     {
         return $this->hasMany(Expression::class);
     }
 
-    public function variable(): HasMany
+    public function variables(): HasMany
     {
         return $this->hasMany(Variable::class);
     }
