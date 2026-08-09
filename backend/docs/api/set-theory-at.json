@@ -383,8 +383,11 @@
                         ],
                         "schema": {
                             "fields": {
-                                "fileId": {
-                                    "type": "number"
+                                "message": {
+                                    "type": "string"
+                                },
+                                "file": {
+                                    "type": "object<File>"
                                 }
                             }
                         }

@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\File;
+use App\Requests\File\CopyRequest;
 use App\Requests\File\DeleteRequest;
 use App\Requests\File\UpdateExampleRequest;
 use Illuminate\Http\Request;
@@ -86,6 +87,49 @@ class FileController
 
         return response()->json(
             ['message'=>'Fájl törlése sikeres.'],200
+        );
+    }
+
+    public function copy(CopyRequest $request)
+    {
+        $user=$request->user();
+        $params=$request->validated();
+        $file=File::where('id','=',$params['file_id'])->where('user_id','<>',$user->id)->where('example','=',true)->whereNull('deleted_at')->with(['expressions', 'variables'])->first();
+        if($file===null) {
+            return response()->json(
+                ['message'=>'A keresett fájl nem található.'],404
+            );
+        }
+
+
+       $copy=DB::transaction(function () use ($file, $user) {
+            $copy = $file->replicate();
+
+            $copy->user_id=$user->id;
+            $copy->example=false;
+            $copy->save();
+
+            foreach ($file->expressions as $expression) {
+                $expressionCopy=$expression->replicate();
+                $expressionCopy->file_id = $copy->id;
+                $expressionCopy->save();
+            }
+
+            foreach ($file->variables as $variable) {
+                $variableCopy=$variable->replicate();
+                $variableCopy->file_id = $copy->id;
+                $variableCopy->save();
+            }
+
+            return $copy;
+        });
+
+        return response()->json(
+            [
+                'message'=>'Fájl másolása sikeres.',
+                'file'=>$copy
+            
+            ],201
         );
     }
 }
