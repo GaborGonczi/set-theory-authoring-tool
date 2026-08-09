@@ -16,6 +16,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 ])]
 class File extends Model
 {
+    protected function casts(): array
+    {
+        return [
+            'example' => 'boolean',
+        ];
+    }
 
     public function user(): BelongsTo
     {
