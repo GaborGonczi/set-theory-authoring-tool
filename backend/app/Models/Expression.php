@@ -21,6 +21,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 ])]
 class Expression extends Model
 {
+    protected function casts(): array
+    {
+        return [
+            'noparse' => 'boolean',
+        ];
+    }
 
     public function getLengthAttribute()
     {

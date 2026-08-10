@@ -5,7 +5,9 @@ namespace App\Controllers;
 use App\Models\File;
 use App\Requests\File\CopyRequest;
 use App\Requests\File\DeleteRequest;
+use App\Requests\File\ExportRequest;
 use App\Requests\File\UpdateExampleRequest;
+use App\Services\FileExporter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use function Illuminate\Support\now;
@@ -131,5 +133,23 @@ class FileController
             
             ],201
         );
+    }
+
+    public function export(ExportRequest $request, FileExporter $exporter)
+    {
+        $user=$request->user();
+        $params=$request->validated();
+        $file=File::where('id','=',$params['file_id'])->where('user_id','=',$user->id)->whereNull('deleted_at')->with(['expressions', 'variables'])->first();
+        if($file===null) {
+            return response()->json(
+                ['message'=>'A keresett fájl nem található.'],404
+            );
+        }
+        $content=$exporter->export($file);
+
+        return response($content, 200, [
+            'Content-Type' => 'text/plain; charset=UTF-8',
+            'Content-Disposition' => 'attachment; filename="export-file-' . $file->id . '-user-' . $user->username . '.txt"',
+        ]);
     }
 }
