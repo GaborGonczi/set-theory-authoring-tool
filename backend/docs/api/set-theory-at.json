@@ -213,8 +213,12 @@
                 "body": {
                     "schema": {
                         "fields": {
-                            "source": {
+                            "statement": {
                                 "type": "string",
+                                "required": true
+                            },
+                            "noparse": {
+                                "type": "boolean",
                                 "required": true
                             },
                             "fileId": {

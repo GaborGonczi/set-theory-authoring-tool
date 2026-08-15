@@ -23,6 +23,7 @@ class Parser
     private $pos;
     private static ?Map $vars = null;
     private static ?Set $baseSet = null;
+    private ?string $definedVariable = null;
 
     public function parse()
     {
@@ -844,6 +845,7 @@ class Parser
                     switch ($rest['op']) {
                         case (Token::TOBEEQUAL['value']):
                             $setoperationside = $lookahead['value'];
+                            $this->definedVariable = $setoperationside;
                             $rest = Functions::flatSetExpression($rest);
                             unset($rest[0]);
                             if (count($rest) == 1) {
@@ -1663,6 +1665,11 @@ class Parser
     public static function setBaseSet($set)
     {
         Parser::$baseSet = $set;
+    }
+
+    public function getDefinedVariable()
+    {
+        return $this->definedVariable;
     }
 
     /**

@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 #[Table(key: 'id')]
 #[Fillable([
     'file_id',
+    'variable_id',
     'statement',
     'result',
     'start',
@@ -37,4 +38,10 @@ class Expression extends Model
     {
         return $this->belongsTo(File::class);
     }
+
+    public function variable(): BelongsTo
+    {
+        return $this->belongsTo(Variable::class);
+    }
+
 }
