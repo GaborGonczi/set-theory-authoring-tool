@@ -4,7 +4,6 @@ namespace App\Interpreter\Parser;
 
 
 
-use App\Interpreter\HtmlEntityTable;
 
 use App\Interpreter\Lib\DataStructures\Map;
 use App\Interpreter\Lib\Functions;
@@ -29,7 +28,7 @@ class Parser
     {
         try {
             $result = $this->statement();
-            $this->match('$');
+            $this->match(Token::EOL['value']);
         } catch (ParserException $pe) {
             return $this->getStringRepresentation($pe);
         } catch (LibException $le) {
@@ -113,7 +112,7 @@ class Parser
         $lookahead = $this->lookahead();
         switch ($lookahead['type']) {
             case (TOKEN::MINUS['name']):
-                $this->match('-');
+                $this->match(Token::MINUS['value']);
                 $lookahead = $this->lookahead();
                 $this->match($lookahead['value']);
                 $result = -1 * $lookahead['value'];
@@ -141,12 +140,12 @@ class Parser
         $lookahead = $this->lookahead();
         switch ($lookahead['type']) {
             case (TOKEN::ELEMENTOF['name']):
-                $this->match('&isin;');
+                $this->match(Token::ELEMENTOF['value']);
                 $result['op'] = $lookahead['value'];
                 $result['set'] = $this->setoperationside();
                 break;
             case (TOKEN::NOTELEMENTOF['name']):
-                $this->match('&notin;');
+                $this->match(Token::NOTELEMENTOF['value']);
                 $result['op'] = $lookahead['value'];
                 $result['set'] = $this->setoperationside();
                 break;
@@ -197,9 +196,9 @@ class Parser
         $lookahead = $this->lookahead();
         switch ($lookahead['type']) {
             case (Token::LEFTCURLYBRACE['name']):
-                $this->match('{');
+                $this->match(Token::LEFTCURLYBRACE['value']);
                 $result = $this->setexp();
-                $this->match('}');
+                $this->match(Token::RIGHTCURLYBRACE['value']);
                 break;
             default:
                 $pos = $this->calculatePosition();
@@ -310,7 +309,7 @@ class Parser
         $lookahead = $this->lookahead();
         switch ($lookahead['type']) {
             case (Token::COMMA['name']):
-                $this->match(',');
+                $this->match(Token::COMMA['value']);
                 $lookahead = $this->lookahead();
                 $id = $lookahead['value'];
                 $this->match($lookahead['value']);
@@ -342,9 +341,9 @@ class Parser
         $lookahead = $this->lookahead();
         switch ($lookahead['type']) {
             case (Token::VERTICALLINE['name']):
-                $this->match('|');
+                $this->match(Token::VERTICALLINE['value']);
                 $logicalexp = $this->logicalexp();
-                $result = ['verticalline' => '|', 'logicalexp' => $logicalexp];
+                $result = ['verticalline' => Token::VERTICALLINE['value'], 'logicalexp' => $logicalexp];
                 break;
             default:
                 $pos = $this->calculatePosition();
@@ -415,10 +414,10 @@ class Parser
                 $result[$identifier][] = Functions::appendVarnameToArrayKeys($rest, $identifier);
                 break;
             case (Token::LEFTPARENTHESIS['name']):
-                $this->match('(');
+                $this->match(Token::LEFTPARENTHESIS['value']);
                 $logicalexp = $this->logicalexp();
-                $this->match(')');
-                $result = ['(', $logicalexp, ')'];
+                $this->match(Token::RIGHTPARENTHESIS['value']);
+                $result = [Token::LEFTPARENTHESIS['value'], $logicalexp, Token::RIGHTPARENTHESIS['value']];
                 break;
             default:
                 $pos = $this->calculatePosition();
@@ -471,7 +470,7 @@ class Parser
         $lookahead = $this->lookahead();
         switch ($lookahead['type']) {
             case (Token::ARROW['name']):
-                $this->match('->');
+                $this->match(Token::ARROW['value']);
                 $result = $this->functiondefinition_();
                 break;
             default:
@@ -525,11 +524,11 @@ class Parser
         $lookahead = $this->lookahead();
         switch ($lookahead['type']) {
             case (Token::DIVIDES['name']):
-                $this->match('&mid;');
+                $this->match(Token::DIVIDES['value']);
                 $result = $lookahead['value'];
                 break;
             case (Token::DOESNOTDIVIDE['name']):
-                $this->match('&nmid;');
+                $this->match(Token::DOESNOTDIVIDE['value']);
                 $result = $lookahead['value'];
                 break;
             default:
@@ -552,23 +551,23 @@ class Parser
         $lookahead = $this->lookahead();
         switch ($lookahead['type']) {
             case (Token::EQUAL['name']):
-                $this->match('=');
+                $this->match(Token::EQUAL['value']);
                 $result = $lookahead['value'];
                 break;
             case (Token::LESSTHAN['name']):
-                $this->match('<');
+                $this->match(Token::LESSTHAN['value']);
                 $result = $lookahead['value'];
                 break;
             case (Token::GREATERTHAN['name']):
-                $this->match('>');
+                $this->match(Token::GREATERTHAN['value']);
                 $result = $lookahead['value'];
                 break;
             case (Token::LESSTHANOREQUAL['name']):
-                $this->match('<=');
+                $this->match(Token::LESSTHANOREQUAL['value']);
                 $result = $lookahead['value'];
                 break;
             case (Token::GREATERTHANOREQUAL['name']):
-                $this->match('>=');
+                $this->match(Token::GREATERTHANOREQUAL['value']);
                 $result = $lookahead['value'];
                 break;
             default:
@@ -710,11 +709,11 @@ class Parser
         $lookahead = $this->lookahead();
         switch ($lookahead['type']) {
             case (Token::LAND['name']):
-                $this->match('&and;');
+                $this->match(Token::LAND['value']);
                 $result = $lookahead['value'];
                 break;
             case (Token::LOR['name']):
-                $this->match('&or;');
+                $this->match(Token::LOR['value']);
                 $result = $lookahead['value'];
                 break;
             default:
@@ -759,7 +758,7 @@ class Parser
         $lookahead = $this->lookahead();
         switch ($lookahead['type']) {
             case (Token::COMMA['name']):
-                $this->match(',');
+                $this->match(Token::COMMA['value']);
                 $result = $this->setliteral();
                 break;
             case (Token::RIGHTCURLYBRACE['name']):
@@ -810,7 +809,7 @@ class Parser
         $lookahead = $this->lookahead();
         switch ($lookahead['type']) {
             case (Token::COMMA['name']):
-                $this->match(',');
+                $this->match(Token::COMMA['value']);
                 $result = $this->pointsetliteral();
                 break;
             case (Token::RIGHTCURLYBRACE['name']):
@@ -946,12 +945,12 @@ class Parser
                 }
                 break;
             case (Token::LEFTPARENTHESIS['name']):
-                $this->match('(');
+                $this->match(Token::LEFTPARENTHESIS['value']);
                 $setoperationside = $this->setoperationside();
                 $rest = $this->stesruisc__();
-                $this->match(')');
+                $this->match(Token::RIGHTPARENTHESIS['value']);
                 $rest2 = $this->stesruisc__();
-                $array = Functions::flatSetExpression(array_merge_recursive(['lhs' => ['lparen' => '(', 'lhs' => $setoperationside, 'rhs' => $rest, 'rparen' => ')'], ['rhs' => $rest2]]));
+                $array = Functions::flatSetExpression(array_merge_recursive(['lhs' => ['lparen' => Token::LEFTPARENTHESIS['value'], 'lhs' => $setoperationside, 'rhs' => $rest, 'rparen' => Token::RIGHTPARENTHESIS['value']], ['rhs' => $rest2]]));
                 if (Functions::isContainsNonSetElement($array)) {
                     throw new SemanticException('A művelet operandusai nem megfelelő típusúak.');
                 }
@@ -1015,28 +1014,28 @@ class Parser
         switch ($lookahead['type']) {
 
             case (Token::TOBEEQUAL['name']):
-                $this->match(':=');
+                $this->match(Token::TOBEEQUAL['value']);
                 $op = $lookahead['value'];
                 $rest = $this->trhs();
                 $result = array_merge_recursive(['op' => $op], ['rhs' => $rest]);
                 break;
 
             case (Token::EQUAL['name']):
-                $this->match('=');
+                $this->match(Token::EQUAL['value']);
                 $op = $lookahead['value'];
                 $rest = $this->stesruisc_();
                 $result = array_merge_recursive(['op' => $op], ['rhs' => $rest]);
                 break;
 
             case (Token::SUBSETOF['name']):
-                $this->match('&sube;');
+                $this->match(Token::SUBSETOF['value']);
                 $op = $lookahead['value'];
                 $rest = $this->stesruisc_();
                 $result = array_merge_recursive(['op' => $op], ['rhs' => $rest]);
                 break;
 
             case (Token::REALSUBSETOF['name']):
-                $this->match('&sub;');
+                $this->match(Token::REALSUBSETOF['value']);
                 $op = $lookahead['value'];
                 $rest = $this->stesruisc_();
                 $result = array_merge_recursive(['op' => $op], ['rhs' => $rest]);
@@ -1052,12 +1051,12 @@ class Parser
                 break;
 
             case (Token::LEFTPARENTHESIS['name']):
-                $this->match('(');
+                $this->match(Token::LEFTPARENTHESIS['value']);
                 $setoperationside = $this->setoperationside();
                 $rest = $this->stesruisc__();
-                $this->match(')');
+                $this->match(Token::RIGHTPARENTHESIS['value']);
                 $rest2 = $this->stesruisc__();
-                $array = Functions::flatSetExpression(array_merge_recursive(['lparen' => '(',], ['lhs' => $setoperationside], ['rest' => $rest], ['rparen' => ')'], ['rest2' => $rest2]));
+                $array = Functions::flatSetExpression(array_merge_recursive(['lparen' => Token::LEFTPARENTHESIS['value'],], ['lhs' => $setoperationside], ['rest' => $rest], ['rparen' => Token::RIGHTPARENTHESIS['value']], ['rest2' => $rest2]));
                 if (Functions::isContainsNonSetElement($array)) {
                     throw new SemanticException('A művelet operandusai nem megfelelő típusúak.');
                 }
@@ -1093,12 +1092,12 @@ class Parser
                 $result['set'] = Functions::evaluateSetExpression($array);
                 break;
             case (Token::LEFTPARENTHESIS['name']):
-                $this->match('(');
+                $this->match(Token::LEFTPARENTHESIS['value']);
                 $setoperationside = $this->setoperationside();
                 $rest = $this->stesruisc__();
-                $this->match(')');
+                $this->match(Token::RIGHTPARENTHESIS['value']);
                 $rest2 = $this->stesruisc__();
-                $array = Functions::flatSetExpression(array_merge_recursive(['lparen' => '(',], ['lhs' => $setoperationside], ['rest' => $rest], ['rparen' => ')'], ['rest2' => $rest2]));
+                $array = Functions::flatSetExpression(array_merge_recursive(['lparen' => Token::LEFTPARENTHESIS['value'],], ['lhs' => $setoperationside], ['rest' => $rest], ['rparen' => Token::RIGHTPARENTHESIS['value']], ['rest2' => $rest2]));
                 if (Functions::isContainsNonSetElement($array)) {
                     throw new SemanticException('A művelet operandusai nem megfelelő típusúak.');
                 }
@@ -1133,12 +1132,12 @@ class Parser
                 $result = array_merge_recursive(['lhs' => $setoperationside], ['rhs' => $rest]);
                 break;
             case (Token::LEFTPARENTHESIS['name']):
-                $this->match('(');
+                $this->match(Token::LEFTPARENTHESIS['value']);
                 $setoperationside = $this->setoperationside();
                 $rest = $this->stesruisc__();
-                $this->match(')');
+                $this->match(Token::RIGHTPARENTHESIS['value']);
                 $rest2 = $this->stesruisc__();
-                $result = array_merge_recursive(['lparen' => '(',], ['lhs' => $setoperationside], ['rest' => $rest], ['rparen' => ')'], ['rest2' => $rest2]);
+                $result = array_merge_recursive(['lparen' => Token::LEFTPARENTHESIS['value'],], ['lhs' => $setoperationside], ['rest' => $rest], ['rparen' => Token::RIGHTPARENTHESIS['value']], ['rest2' => $rest2]);
                 break;
             case (Token::RIGHTPARENTHESIS['name']):
             case (Token::VERTICALLINE['name']):
@@ -1192,25 +1191,25 @@ class Parser
         switch ($lookahead['type']) {
 
             case (Token::UNION['name']):
-                $this->match('&cup;');
+                $this->match(Token::UNION['value']);
                 $op = $lookahead['value'];
                 $rest = $this->stesruisc_();
                 $result = array_merge_recursive(['op' => $op], ['rhs' => $rest]);
                 break;
             case (Token::INTERSECTION['name']):
-                $this->match('&cap;');
+                $this->match(Token::INTERSECTION['value']);
                 $op = $lookahead['value'];
                 $rest = $this->stesruisc_();
                 $result = array_merge_recursive(['op' => $op], ['rhs' => $rest]);
                 break;
             case (Token::SETMINUS['name']):
-                $this->match('&setminus;');
+                $this->match(Token::SETMINUS['value']);
                 $op = $lookahead['value'];
                 $rest = $this->stesruisc_();
                 $result = array_merge_recursive(['op' => $op], ['rhs' => $rest]);
                 break;
             case (Token::COMPLEMENT['name']):
-                $this->match('&comp;');
+                $this->match(Token::COMPLEMENT['value']);
                 $op = $lookahead['value'];
                 $rest = $this->uisc();
                 $result = array_merge_recursive(['op' => $op], ['rhs' => $rest]);
@@ -1239,12 +1238,13 @@ class Parser
         $lookahead = $this->lookahead();
         switch ($lookahead['type']) {
             case (Token::DOT['name']):
-                $this->match('.');
+                $this->match(Token::DOT['value']);
+                $op = $lookahead['value'];
                 $funcname = $this->sofunctionname();
-                $this->match('(');
+                $this->match(Token::LEFTPARENTHESIS['value']);
                 $arguments = $this->arguments();
-                $this->match(')');
-                $result = ['op' => '.', 'funcname' => $funcname, 'arguments' => $arguments];
+                $this->match(Token::RIGHTPARENTHESIS['value']);
+                $result = ['op' => $op, 'funcname' => $funcname, 'arguments' => $arguments];
                 break;
 
             default:
@@ -1266,11 +1266,11 @@ class Parser
         switch ($lookahead['type']) {
             case (Token::ADD['name']):
                 $result = $lookahead['value'];
-                $this->match('add');
+                $this->match(Token::ADD['value']);
                 break;
             case (Token::DELETE['name']):
                 $result = $lookahead['value'];
-                $this->match('delete');
+                $this->match(Token::DELETE['value']);
                 break;
             default:
                 $pos = $this->calculatePosition();
@@ -1355,7 +1355,7 @@ class Parser
         $lookahead = $this->lookahead();
         switch ($lookahead['type']) {
             case (Token::COMMA['name']):
-                $this->match(',');
+                $this->match(Token::COMMA['value']);
                 $result = $this->arguments();
                 break;
             case (Token::RIGHTPARENTHESIS['name']):
@@ -1379,11 +1379,11 @@ class Parser
         $lookahead = $this->lookahead();
         switch ($lookahead['type']) {
             case (Token::LEFTSQUAREBRACKET['name']):
-                $this->match('[');
+                $this->match(Token::LEFTSQUAREBRACKET['value']);
                 $point_x = $this->wholenumber();
-                $this->match(',');
+                $this->match(Token::COMMA['value']);
                 $point_y = $this->wholenumber();
-                $this->match(']');
+                $this->match(Token::RIGHTSQUAREBRACKET['value']);
                 $result = new LPoint($point_x, $point_y);
                 break;
 
@@ -1428,7 +1428,7 @@ class Parser
         $lookahead = $this->lookahead();
         switch ($lookahead['type']) {
             case (Token::VERTICALLINE['name']):
-                $this->match('|');
+                $this->match(Token::VERTICALLINE['value']);
                 $result = $this->scardinality_();
                 break;
             default:
@@ -1463,16 +1463,16 @@ class Parser
                     throw new SemanticException('A művelet operandusai nem megfelelő típusúak.');
                 }
                 $set = Functions::evaluateSetExpression($array);
-                $this->match('|');
+                $this->match(Token::VERTICALLINE['value']);
                 $result = Functions::cardinality($set);
                 break;
             case (Token::LEFTPARENTHESIS['name']):
-                $this->match('(');
+                $this->match(Token::LEFTPARENTHESIS['value']);
                 $setoperationside = $this->setoperationside();
                 $rest = $this->sexpr_();
-                $this->match(')');
+                $this->match(Token::RIGHTPARENTHESIS['value']);
                 $rest2 = $this->uisc();
-                $this->match('|');
+                $this->match(Token::VERTICALLINE['value']);
                 Parser::setBaseSet($this->getVars()->get("H"));
                 $array = Functions::flatSetExpression(array_merge_recursive(['lhs' => ['lparen' => '(', 'lhs' => $setoperationside, 'rhs' => $rest, 'rparen' => ')'], ['rhs' => $rest2]]));
                 if (Functions::isContainsNonSetElement($array)) {
@@ -1528,19 +1528,19 @@ class Parser
         $lookahead = $this->lookahead();
         switch ($lookahead['type']) {
             case (Token::PLUS['name']):
-                $this->match('+');
+                $this->match(Token::PLUS['value']);
                 $result = $lookahead['value'];
                 break;
             case (Token::MINUS['name']):
-                $this->match('-');
+                $this->match(Token::MINUS['value']);
                 $result = $lookahead['value'];
                 break;
             case (Token::MULTIPLY['name']):
-                $this->match('*');
+                $this->match(Token::MULTIPLY['value']);
                 $result = $lookahead['value'];
                 break;
             case (Token::DIVIDE['name']):
-                $this->match('/');
+                $this->match(Token::DIVIDE['value']);
                 $result = $lookahead['value'];
                 break;
             default:
@@ -1564,9 +1564,9 @@ class Parser
             case (Token::VENN['name']):
             case (Token::POINTSETDIAGRAM['name']):
                 $name = $this->sfunctionname();
-                $this->match('(');
+                $this->match(Token::LEFTPARENTHESIS['value']);
                 $arguments = $this->arguments();
-                $this->match(')');
+                $this->match(Token::RIGHTPARENTHESIS['value']);
                 if ($name === 'Venn') {
                     $arguments = Functions::flatSetExpression($arguments);
                     $result = Functions::$name(18, ...$arguments);
@@ -1600,11 +1600,11 @@ class Parser
         switch ($lookahead['type']) {
             case (Token::POINTSETDIAGRAM['name']):
                 $result = $lookahead['value'];
-                $this->match('PointSetDiagram');
+                $this->match(Token::POINTSETDIAGRAM['value']);
                 break;
             case (Token::VENN['name']):
                 $result = $lookahead['value'];
-                $this->match('Venn');
+                $this->match(Token::VENN['value']);
                 break;
             default:
                 $pos = $this->calculatePosition();
@@ -1700,12 +1700,6 @@ class Parser
     {
         $numindex = array_search(Token::NUMBER['value'], $expected);
         $identindex = array_search(Token::IDENTIFIER['value'], $expected);
-
-        foreach (HtmlEntityTable::TABLE as $key => $value) {
-            if (($specialcharindex = array_search($key, $expected)) !== false) {
-                $expected[$specialcharindex] = $value;
-            }
-        }
 
         if ($numindex !== false) {
             $expected[$numindex] = 'Egész szám';
