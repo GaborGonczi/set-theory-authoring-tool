@@ -6,8 +6,10 @@ use App\Models\File;
 use App\Requests\File\CopyRequest;
 use App\Requests\File\DeleteRequest;
 use App\Requests\File\ExportRequest;
+use App\Requests\File\ImportRequest;
 use App\Requests\File\UpdateExampleRequest;
 use App\Services\FileExporter;
+use App\Services\FileImporter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use function Illuminate\Support\now;
@@ -151,5 +153,20 @@ class FileController
             'Content-Type' => 'text/plain; charset=UTF-8',
             'Content-Disposition' => 'attachment; filename="export-file-' . $file->id . '-user-' . $user->username . '.txt"',
         ]);
+    }
+
+    public function import(ImportRequest $request, FileImporter $importer)
+    {
+        $user=$request->user();
+        $request->validated();
+        $file=$request->file('file')->get();
+        
+        $imported=$importer->import($user,$file);
+
+        if($imported['status'])
+
+        return response()->json(
+           $imported['body'],$imported['status']
+        );
     }
 }

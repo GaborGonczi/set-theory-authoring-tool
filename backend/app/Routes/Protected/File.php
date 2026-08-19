@@ -11,4 +11,5 @@ Route::prefix('file')->group(function () {
     Route::post('/delete', [FileController::class, 'delete']);
     Route::post('/copy', [FileController::class, 'copy']);
     Route::post('/export', [FileController::class, 'export']);
+    Route::post('/import', [FileController::class, 'import']);
 });
