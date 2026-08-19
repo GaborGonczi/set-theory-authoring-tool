@@ -7,6 +7,7 @@ use App\Requests\File\CopyRequest;
 use App\Requests\File\DeleteRequest;
 use App\Requests\File\ExportRequest;
 use App\Requests\File\ImportRequest;
+use App\Requests\File\LoadRequest;
 use App\Requests\File\UpdateExampleRequest;
 use App\Services\FileExporter;
 use App\Services\FileImporter;
@@ -167,6 +168,22 @@ class FileController
 
         return response()->json(
            $imported['body'],$imported['status']
+        );
+    }
+
+    public function load(LoadRequest $request)
+    {
+        $user=$request->user();
+        $params=$request->validated();
+        $file=File::where('id','=',$params['file_id'])->whereBelongsTo($user)->whereNull('deleted_at')->with(['expressions', 'variables'])->first();
+        if($file===null) {
+            return response()->json(
+                ['message'=>'A keresett fájl nem található.'],404
+            );
+        }
+
+        return response()->json(
+            ['file'=>$file],200
         );
     }
 }

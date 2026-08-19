@@ -12,4 +12,5 @@ Route::prefix('file')->group(function () {
     Route::post('/copy', [FileController::class, 'copy']);
     Route::post('/export', [FileController::class, 'export']);
     Route::post('/import', [FileController::class, 'import']);
+    Route::post('/load', [FileController::class, 'load']);
 });

@@ -502,8 +502,8 @@
                     }
                 }
             },
-            "open": {
-                "url": "{{env.baseurl}}/file/open",
+            "load": {
+                "url": "{{env.baseurl}}/file/load",
                 "headers": [
                     {
                         "name": "Authorization",
