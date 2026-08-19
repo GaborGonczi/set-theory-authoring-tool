@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Interpreter\SymbolTable;
 use App\Models\File;
 
 class FileExporter
@@ -11,21 +12,21 @@ class FileExporter
 
         foreach ($file->expressions as $expression) {
             if($expression->noparse===false) {
-                $content.='@execute'."\n";
-                $content.=$expression->statement."\n";
-                $content.='@result'."\n";
-                $content.=$expression->result."\n";
+                $content[]='@execute';
+                $content[]= SymbolTable::toNotation($expression->statement);
+                $content[]='@result';
+                $content[]=$expression->result;
             }
             else {
-                $content.=$expression->statement."\n";
+                $content[]=$expression->statement;
             }
         }
 
-        return $content;
+        return implode("\n",$content);
     }
 
     private function usage() {
-        return '# Ez a fájl speciális utasításokat tartalmaz, amelyek a fájl feldolgozását szabályozzák.
+        return ['# Ez a fájl speciális utasításokat tartalmaz, amelyek a fájl feldolgozását szabályozzák.
 #
 # A megjegyzéseket # jelöli.
 #
@@ -45,6 +46,6 @@ class FileExporter
 #
 # Ez egy szövegként értelmezett utasítás.
 
-';
+'];
     }
 }
