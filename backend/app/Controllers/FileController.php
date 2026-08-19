@@ -164,8 +164,6 @@ class FileController
         
         $imported=$importer->import($user,$file);
 
-        if($imported['status'])
-
         return response()->json(
            $imported['body'],$imported['status']
         );
