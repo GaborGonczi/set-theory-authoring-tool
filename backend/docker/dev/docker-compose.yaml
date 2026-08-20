@@ -1,0 +1,13 @@
+services:
+  set-theory-at:
+    build:
+      context: ../..
+      dockerfile: docker/dev/Dockerfile
+    container_name: set-theory-at-dev
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../..:/app
+    command: >
+      sh -c "php artisan serve --host=0.0.0.0"

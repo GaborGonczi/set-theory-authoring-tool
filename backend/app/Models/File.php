@@ -1,0 +1,41 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Table;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+#[Table(key: 'id')]
+#[Fillable([
+    'user_id',
+    'example',    
+])]
+class File extends Model
+{
+    protected function casts(): array
+    {
+        return [
+            'example' => 'boolean',
+        ];
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function expressions(): HasMany
+    {
+        return $this->hasMany(Expression::class);
+    }
+
+    public function variables(): HasMany
+    {
+        return $this->hasMany(Variable::class);
+    }
+    
+}
