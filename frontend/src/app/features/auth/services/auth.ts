@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Service } from '@angular/core';
 import { API } from '@src/app/api/api';
 import { User } from '@src/app/features/auth/models/user';
-import { LoginBody, LoginResponse, Payload } from '@src/app/features/auth/types/auth';
+import { LoginBody, LoginResponse, Payload, RegisterBody, RegisterResponse } from '@src/app/features/auth/types/auth';
 import { Observable, tap } from 'rxjs';
 
 
@@ -18,6 +18,17 @@ export class Auth {
 
   public login(body: LoginBody):Observable<LoginResponse> {
     return this.http.post<LoginResponse>(API.AUTH.LOGIN, body).pipe(
+      tap({
+        next: (response) => {
+            this.setToken(response.access_token);
+            this.setUser(new User(response.user));
+        } 
+      }),
+    );
+  }
+
+  public register(body: RegisterBody):Observable<RegisterResponse> {
+    return this.http.post<RegisterResponse>(API.AUTH.REGISTER, body).pipe(
       tap({
         next: (response) => {
             this.setToken(response.access_token);
@@ -43,8 +54,11 @@ export class Auth {
     }
     
     const payload = this.decodePayload(token);
+
+    const isGoodIssuer = payload.iss === API.AUTH.LOGIN ||
+    payload.iss === API.AUTH.REGISTER;
     
-    if(payload.iss!==API.AUTH.LOGIN){
+    if(!isGoodIssuer){
         return false;
     }
 

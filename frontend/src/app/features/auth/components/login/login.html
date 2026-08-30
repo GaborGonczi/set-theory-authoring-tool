@@ -26,7 +26,10 @@
     @if(error){
         <mat-error>{{error}}</mat-error>
     }
-
-    <button matButton="filled" type="submit" [disabled]="form.invalid" >Bejelentkezés</button>
+    <div class="form-actions">
+      <button class="login-button" matButton="filled" type="submit" [disabled]="form.invalid" >Bejelentkezés</button>
+      <a class="register-button" matButton="filled" routerLink="/register">Regisztráció<mat-icon iconPositionEnd>arrow_forward</mat-icon></a> 
+    </div>
+    
   </form>
 </div>
