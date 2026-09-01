@@ -4,3 +4,9 @@
   flex-direction: column;
   overflow: hidden;
 }
+
+.content {
+  flex: 1;
+  min-width: 0;
+  padding: 24px;
+}

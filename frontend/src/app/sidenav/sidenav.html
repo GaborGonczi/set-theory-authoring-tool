@@ -1,0 +1,33 @@
+@if (enabled()) {
+  <mat-sidenav-container class="sidenav-container" [class.fullsize]="opened">
+    <mat-sidenav mode="over" [opened]="opened">
+      <mat-nav-list>
+        @for (item of menuItems; track item.path) {
+          <mat-list-item>
+            @if ($first) {
+              <div class="flex-container">
+                <button matButton="filled" [routerLink]="item.path" routerLinkActive="active" (click)="toggle()" >
+                  {{ item.name }}
+                </button>
+                <button mat-icon-button (click)="toggle()" class="close">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div>
+            } @else {
+              <button matButton="filled" [routerLink]="item.path" routerLinkActive="active" (click)="toggle()" >
+                {{ item.name }}
+              </button>
+            }
+
+            @if ($first) {}
+          </mat-list-item>
+        }
+      </mat-nav-list>
+    </mat-sidenav>
+    @if (!opened) {
+      <button class="menu-button" mat-icon-button (click)="toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+    }
+  </mat-sidenav-container>
+}

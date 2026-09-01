@@ -9,7 +9,8 @@ export const routes: Routes = [
     {
         path:'',
         component:Dashboard,
-        canActivate:[authGuard]
+        canActivate:[authGuard],
+        data:{sidenav:true}
     },
     {
         path:'login',
