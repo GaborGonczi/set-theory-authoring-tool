@@ -1,5 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { Auth } from '@src/app/features/auth/services/auth';
+import { LogoutResponse } from '@src/app/features/auth/types/auth';
 import { SIDENAV_IMPORTS } from '@src/app/sidenav/sidenav.imports';
 import { filter } from 'rxjs';
 
@@ -19,6 +21,7 @@ export class Sidenav implements OnInit {
 
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+  private auth = inject(Auth);
 
   public enabled = signal(this.route.root.firstChild?.snapshot.data['sidenav'] === true);
   public opened : boolean = false;
@@ -64,6 +67,23 @@ export class Sidenav implements OnInit {
 
   public toggle() {
     this.opened=!this.opened;
+  }
+
+  public error:string = '';
+
+  public logout() {
+    this.auth.logout().subscribe({
+      next:(response)=>this.handleSuccess(response),
+      error:(error)=>this.handleError(error)
+    })
+  }
+
+  public handleSuccess(response:LogoutResponse) {
+    this.router.navigateByUrl('/login');
+  }
+  
+  public handleError(error:any) {
+      this.error=error.message;
   }
 
 }

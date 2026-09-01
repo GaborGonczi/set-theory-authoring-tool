@@ -23,6 +23,10 @@ export type RegisterResponse = {
   user: {id:number,username:string};
 };
 
+export type LogoutResponse = {
+  message: string;
+};
+
 export type Payload = {
     exp:number;
     iat:number;

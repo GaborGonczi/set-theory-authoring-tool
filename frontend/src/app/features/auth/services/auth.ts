@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Service } from '@angular/core';
 import { API } from '@src/app/api/api';
 import { User } from '@src/app/features/auth/models/user';
-import { LoginBody, LoginResponse, Payload, RegisterBody, RegisterResponse } from '@src/app/features/auth/types/auth';
+import { LoginBody, LoginResponse, LogoutResponse, Payload, RegisterBody, RegisterResponse } from '@src/app/features/auth/types/auth';
 import { Observable, tap } from 'rxjs';
 
 
@@ -38,12 +38,27 @@ export class Auth {
     );
   }
 
+   public logout():Observable<LogoutResponse> {
+    return this.http.post<LogoutResponse>(API.AUTH.LOGOUT,null).pipe(
+      tap({
+        next: (response) => {
+            this.delToken();
+            this.delUser();
+        } 
+      }),
+    );
+  }
+
   private setToken(token: string):void {
     sessionStorage.setItem(this.TOKEN_KEY,token)
   }
 
   public getToken():string|null {
     return sessionStorage.getItem(this.TOKEN_KEY)
+  }
+
+  private delToken():void {
+    sessionStorage.removeItem(this.TOKEN_KEY)
   }
 
   public isAuthenticated():boolean {
@@ -81,5 +96,10 @@ export class Auth {
   public getUser():User {
     const json = JSON.parse(sessionStorage.getItem(this.USER_KEY) ||'{}');
     return new User(json);
+  }
+
+  private delUser():void {
+    sessionStorage.removeItem(this.USER_KEY);
+  
   }
 }

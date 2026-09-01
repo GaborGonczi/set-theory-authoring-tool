@@ -18,10 +18,11 @@
                 {{ item.name }}
               </button>
             }
-
-            @if ($first) {}
           </mat-list-item>
         }
+          <mat-list-item>
+            <button matButton="filled"  routerLinkActive="active" (click)="logout()">Kijelentkezés</button>
+          </mat-list-item>
       </mat-nav-list>
     </mat-sidenav>
     @if (!opened) {
