@@ -27,6 +27,10 @@ export type LogoutResponse = {
   message: string;
 };
 
+export type ErrorResponse = {
+  error: {message:string};
+}
+
 export type Payload = {
     exp:number;
     iat:number;

@@ -3,7 +3,7 @@ import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/fo
 import { Router } from '@angular/router';
 import { REGISTER_IMPORTS } from '@src/app/features/auth/components/register/register.imports';
 import { Auth } from '@src/app/features/auth/services/auth';
-import { RegisterResponse } from '@src/app/features/auth/types/auth';
+import { ErrorResponse, RegisterResponse } from '@src/app/features/auth/types/auth';
 import { sameAs } from '@src/app/features/auth/validators/sameAs-validator';
 
 @Component({
@@ -57,7 +57,7 @@ export class Register {
     this.router.navigateByUrl('/');
   }
 
-  public handleError(error: any) {
-    this.error = error.message;
+  public handleError(response: ErrorResponse) {
+    this.error = response.error.message;
   }
 }

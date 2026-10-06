@@ -3,7 +3,7 @@ import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/fo
 import { Router } from '@angular/router';
 import { LOGIN_IMPORTS } from '@src/app/features/auth/components/login/login.imports';
 import { Auth } from '@src/app/features/auth/services/auth';
-import { LoginResponse } from '@src/app/features/auth/types/auth';
+import { ErrorResponse, LoginResponse } from '@src/app/features/auth/types/auth';
 
 @Component({
   imports: LOGIN_IMPORTS,
@@ -41,8 +41,8 @@ export class Login {
     this.router.navigateByUrl('/');
   }
 
-  public handleError(error:any) {
-    this.error=error.message;
+  public handleError(response:ErrorResponse) {
+    this.error=response.error.message;
   }
 
 }
