@@ -79,6 +79,7 @@ export class Sidenav implements OnInit {
   }
 
   public handleSuccess(response:LogoutResponse) {
+    this.toggle();
     this.router.navigateByUrl('/login');
   }
   
