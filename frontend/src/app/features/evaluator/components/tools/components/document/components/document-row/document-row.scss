@@ -1,0 +1,32 @@
+.document-row {
+    width: 100%;
+    line-height: 3em;
+}
+
+.document-row img {
+    width: 660px;
+    height: 660px;
+}
+
+.document-row input {
+    width: calc(100% - 4px);
+    height: 3em;
+    padding: 0;
+    margin: 2px 2px;
+    border: 0;
+    background: transparent;
+    box-sizing: border-box;
+    font: inherit;
+}
+
+.result {
+    color: blue;
+}
+
+.math-mode {
+    font-style: italic;
+}
+
+.normal-mode {
+    font-style: normal;
+}

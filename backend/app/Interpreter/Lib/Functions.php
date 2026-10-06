@@ -1391,12 +1391,10 @@ class Functions
             $image=Functions::vennThreeSets($seta,$setb,$setc,$sizeInPt);
         }
 
-        $path=storage_path('images/'.Str::uuid7().'.png');
-        
-     
+        $filename=Str::uuid7();
+        $path=storage_path('images/'.$filename.'.png');      
         imagepng($image,$path);
-        
-        return $path;
+        return $filename;
     }
 
     /**

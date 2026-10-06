@@ -161,11 +161,10 @@ class PointSetDiagramFunctions
         PointSetDiagramFunctions::drawAxesDirectionTriangle($image,$options);
         PointSetDiagramFunctions::drawPoints($points,$image,$options);
 
-        $path=storage_path('images/'.Str::uuid7().'.png');
-        
-        imagepng($image,$path);
-        
-        return $path;
+       $filename=Str::uuid7();
+       $path=storage_path('images/'.$filename.'.png');      
+       imagepng($image,$path);
+       return $filename;
     }
 
 

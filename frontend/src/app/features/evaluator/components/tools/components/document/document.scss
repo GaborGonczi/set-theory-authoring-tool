@@ -1,0 +1,24 @@
+.wrapper {
+  --line-height: 3em;
+  width: 100%;
+  height: calc(100dvh - var(--line-height));
+  display: flex;
+  flex-direction: column;
+}
+
+.document {
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    /* Firefox */
+    scrollbar-width: none;
+
+    /* Chrome, Edge, Safari */
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+

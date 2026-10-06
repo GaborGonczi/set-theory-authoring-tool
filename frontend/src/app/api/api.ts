@@ -40,6 +40,7 @@ const apiDefinition = {
 
   expression: {
     evaluate: 'evaluate',
+    get_figure: 'get_figure',
   },
 
   file: {

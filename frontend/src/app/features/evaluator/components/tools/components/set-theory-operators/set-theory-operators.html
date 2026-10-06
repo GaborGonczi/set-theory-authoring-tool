@@ -1,0 +1,5 @@
+<div class="grid-container" [style.--grid-column]="3" [style.--grid-row]="5">
+    @for (button of buttons; track $index) {
+        <button matButton="filled" [value]="button.value" [title]="button.tooltip" (click)="addOperatorToContext(button.value)">{{button.value}}</button>
+    }
+</div>
