@@ -41,7 +41,7 @@
       <mat-error> A jelszó mezőknek meg kell egyezniük. </mat-error>
     }
 
-    @if(error){
+    @if(error(); as error){
         <mat-error>{{error}}</mat-error>
     }
     <div class="form-actions">

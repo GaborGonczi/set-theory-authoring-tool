@@ -23,8 +23,8 @@
       <mat-error> A jelszónak legalább 8 karakter hosszúnak kell lennie. </mat-error>
     }
 
-    @if(error){
-        <mat-error>{{error}}</mat-error>
+    @if(error(); as error){
+       <mat-error>{{error}}</mat-error>
     }
     <div class="form-actions">
       <button class="login-button" matButton="filled" type="submit" [disabled]="form.invalid" >Bejelentkezés</button>

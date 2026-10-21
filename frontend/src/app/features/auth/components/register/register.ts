@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { REGISTER_IMPORTS } from '@src/app/features/auth/components/register/register.imports';
@@ -37,7 +37,7 @@ export class Register {
     this.showPassword=!this.showPassword;
   }
 
-  public error: string = '';
+  public error = signal('');
 
   public showError(control: AbstractControl, error: string): boolean {
     return control.touched && control.hasError(error);
@@ -58,6 +58,6 @@ export class Register {
   }
 
   public handleError(response: ErrorResponse) {
-    this.error = response.error.message;
+    this.error.set(response.error.message);
   }
 }

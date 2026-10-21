@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LOGIN_IMPORTS } from '@src/app/features/auth/components/login/login.imports';
@@ -20,7 +20,7 @@ export class Login {
     password: new FormControl('',{validators:[Validators.required,Validators.minLength(8)],nonNullable:true})
   });
 
-  public error:string = '';
+  public error = signal('');
 
   public showError(control:AbstractControl,error:string):boolean {
     return control.touched&&control.hasError(error)
@@ -42,7 +42,7 @@ export class Login {
   }
 
   public handleError(response:ErrorResponse) {
-    this.error=response.error.message;
+    this.error.set(response.error.message);
   }
 
 }
