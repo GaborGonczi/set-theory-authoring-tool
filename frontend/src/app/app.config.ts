@@ -3,7 +3,8 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { tokenInterceptor } from '@src/app/features/auth/interceptors/token-interceptor';
+import { provideMarkdown} from 'ngx-markdown'
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideBrowserGlobalErrorListeners(), provideRouter(routes), provideHttpClient(withInterceptors([tokenInterceptor]))],
+  providers: [provideBrowserGlobalErrorListeners(), provideRouter(routes), provideHttpClient(withInterceptors([tokenInterceptor])),provideMarkdown()],
 };
