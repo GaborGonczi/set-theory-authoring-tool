@@ -1,6 +1,5 @@
 
 import { Component, inject, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { TOOL_TYPE } from '@src/angular/types';
 import { EDITOR_IMPORTS } from '@src/app/features/evaluator/components/editor/editor.imports';
 import { Document } from '@src/app/features/evaluator/components/tools/components/document/document';
@@ -32,10 +31,9 @@ export class Editor implements OnInit {
   ];
 
   private context = inject(EditorContext);
-  private router = inject(Router);
 
   ngOnInit(): void {
-    const fileId=this.router.currentNavigation()?.extras.state?.['fileId'] ?? null;
+    const fileId=history.state['fileId']
     this.context.init(fileId);
   }
 }

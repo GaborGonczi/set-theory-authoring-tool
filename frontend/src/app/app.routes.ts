@@ -5,6 +5,7 @@ import { authGuard } from '@src/app/features/auth/guards/auth-guard';
 import { guestGuard } from '@src/app/features/auth/guards/guest-guard';
 import { Dashboard } from '@src/app/features/dashboard/components/dashboard/dashboard';
 import { Editor } from '@src/app/features/evaluator/components/editor/editor';
+import { FileList } from '@src/app/features/files/components/file-list/file-list';
 
 export const routes: Routes = [
     {
@@ -16,6 +17,12 @@ export const routes: Routes = [
     {
         path:'evaluator',
         component:Editor,
+        canActivate:[authGuard],
+        data:{sidenav:true}
+    },
+    {
+        path:'files',
+        component:FileList,
         canActivate:[authGuard],
         data:{sidenav:true}
     },

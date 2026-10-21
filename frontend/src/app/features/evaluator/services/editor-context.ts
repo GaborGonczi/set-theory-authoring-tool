@@ -24,7 +24,7 @@ export class EditorContext {
     this.fileId = fileId;
     if (this.fileId) {
       let body = {} as LoadBody;
-      body.fileId = this.fileId;
+      body.file_id = this.fileId;
       this.backendService.load(body).subscribe({
         next: (response) => this.setFile(new File(response.file)),
         error: (error) => this.setError(error),

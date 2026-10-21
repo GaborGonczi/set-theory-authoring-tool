@@ -12,7 +12,7 @@ export type EvaluateResponse = {
 };
 
 export type LoadBody = {
-  fileId:number;
+  file_id:number;
 };
 
 export type LoadResponse = {
