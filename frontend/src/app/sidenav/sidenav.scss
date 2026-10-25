@@ -1,0 +1,29 @@
+
+.sidenav-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.sidenav-container.fullsize {
+  height: 100vh;
+}
+
+.flex-container{
+    display: flex;
+    justify-content: space-between;
+}
+
+.menu-button {
+  position: fixed;
+  top: 5px;
+  left: 5px;
+  z-index: 1001;
+}
+
+button.active {
+  background-color: var(--mat-sys-secondary);
+  color: var(--mat-sys-on-secondary);
+}

@@ -23,7 +23,7 @@ class FileImporter
 
         if(empty($lines)){
             return [
-                'body'=>['message'=>'A fájlban nem találhatóak sorok.'],
+                'body'=>['message'=>'Hibás fájl! A fájlban nem találhatóak sorok.'],
                 'status'=>422
             ]; 
         }
@@ -52,10 +52,20 @@ class FileImporter
                 ++$i;
                 if(!isset($lines[$i])){
                     return [
-                        'body'=>['message'=>'Az @execute vezérlősor nem lehet a fájl végén.'],
+                        'body'=>['message'=>'Hibás fájl! Az @execute vezérlősor nem lehet a fájl végén.'],
                         'status'=>422
                         
                     ];
+                }
+                else if($this->isResultCommand($lines[$i])){
+                    return [
+                        'body'=>['message'=>'Hibás fájl! Az @execute vezérlősor után nem lehet vezérlősor.'],
+                        'status'=>422
+                        
+                    ];
+                }
+                else if($this->isEmpty($lines[$i])){
+                    ++$i;
                 }
                 $rowsToImport[]=['statement'=>$lines[$i],'noparse'=>false];
                 ++$i;
@@ -64,12 +74,15 @@ class FileImporter
             else if($this->isResultCommand($lines[$i])){
                 if(!isset($lines[$i-2]) || !$this->isExecuteCommand($lines[$i-2])) {
                     return [
-                        'body'=>['message'=>'A @result vezérlősor előtt 2 sorral @execute vezérlősornak kell lennie.'],
+                        'body'=>['message'=>'Hibás fájl! A @result vezérlősor előtt 2 sorral @execute vezérlősornak kell lennie.'],
                         'status'=>422
                         
                     ];
                 }
                 $i+=2;
+            }
+            else if($this->isEmpty($lines[$i])){
+                ++$i;
             }
             else{
                 $rowsToImport[]=['statement'=>$lines[$i],'noparse'=>true];
@@ -108,6 +121,7 @@ class FileImporter
     private function isComment($line) {
         return str_starts_with($line,'#');
     }
+
     private function isExecuteCommand($line){
         return "@execute" === trim($line);
     }
@@ -116,4 +130,7 @@ class FileImporter
         return "@result" === trim($line);
     }
 
+    private function isEmpty($line){
+        return $line === "";
+    }
 }

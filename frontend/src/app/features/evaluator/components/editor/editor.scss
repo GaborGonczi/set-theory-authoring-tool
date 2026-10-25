@@ -1,0 +1,17 @@
+:host {
+  display: flex;
+  background-color: var(--mat-sys-surface-container);
+  gap: 50px;
+
+}
+
+app-toolbar[position="left"],
+app-toolbar[position="right"] {
+  flex: 0 0 auto;
+}
+
+app-toolbar[position="center"] {
+  flex: 1 1 auto;
+  min-width: 0;
+  background-color: var(--mat-sys-surface);;
+}

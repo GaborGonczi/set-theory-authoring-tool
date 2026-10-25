@@ -1,0 +1,35 @@
+<div class="login-container">
+  <form class="login-form" [formGroup]="form" (ngSubmit)="login()">
+    <mat-form-field>
+      <mat-label>Felhasználónév</mat-label>
+      <input matInput formControlName="username" />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Jelszó</mat-label>
+      <input type="password" matInput formControlName="password" />
+    </mat-form-field>
+    @if (showError(form.controls.username,'required')) {
+      <mat-error> Felhasználónév megadása kötelező. </mat-error>
+    }
+
+    @if (showError(form.controls.username,'minlength')) {
+      <mat-error> A felhasználónévnek legalább 3 karakter hosszúnak kell lennie. </mat-error>
+    }
+    @if (showError(form.controls.password,'required')) {
+      <mat-error> Jelszó megadása kötelező. </mat-error>
+    }
+
+    @if (showError(form.controls.password,'minlength')) {
+      <mat-error> A jelszónak legalább 8 karakter hosszúnak kell lennie. </mat-error>
+    }
+
+    @if(error(); as error){
+       <mat-error>{{error}}</mat-error>
+    }
+    <div class="form-actions">
+      <button class="login-button" matButton="filled" type="submit" [disabled]="form.invalid" >Bejelentkezés</button>
+      <a class="register-button" matButton="filled" routerLink="/register">Regisztráció<mat-icon iconPositionEnd>arrow_forward</mat-icon></a> 
+    </div>
+    
+  </form>
+</div>

@@ -1,0 +1,16 @@
+<div class="document-row">
+  @if (!isNew()) {
+    <input id="old" matInput [value]="expression.getStatement()" (input)="expression.setStatement($event.target.value)" (keydown.enter)="sendExpression($event.target.value)" (focus)="storeInput($event.target)"/>
+    @if(!isImage()) {
+      <div class="result">{{ expression.getResult() }}</div>
+    }
+    @else {
+      <img [src]="image()" />
+    }
+    
+  }
+  @else {
+    <input id="new" matInput #newInput  (keydown.enter)="sendExpression($event.target.value)" (focus)="storeInput($event.target)"/>
+  }
+ 
+</div>

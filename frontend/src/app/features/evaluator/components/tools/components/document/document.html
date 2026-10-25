@@ -1,0 +1,9 @@
+<div class="wrapper">
+<div #document class="document">
+  @for (row of rows(); track row.getId()) {
+    <app-document-row [expression]="row" (evaluationCompleted)="focusNewRow()"></app-document-row>
+  }
+</div>
+<app-document-row #newRow></app-document-row>
+
+</div>

@@ -1,0 +1,12 @@
+.markdown-container {
+  overflow-y: scroll;
+  height: calc(100vh - 1em);
+
+  /* Firefox */
+  scrollbar-width: none;
+
+  /* Chrome, Edge, Safari */
+  &::-webkit-scrollbar {
+      display: none;
+  }
+}

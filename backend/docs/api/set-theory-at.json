@@ -273,6 +273,64 @@
                         }
                     }
                 }
+            },
+             "get_figure": {
+                "url": "{{env.baseurl}}/expression/get_figure",
+                "headers": [
+                    {
+                        "name": "Authorization",
+                        "value": "Bearer {{env.token}}"
+                    },
+                    {
+                        "name": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "schema": {
+                        "fields": {
+                            "name": {
+                                "type": "string",
+                                "required": true
+                            }
+                        }
+                    }
+                },
+                "response": {
+                    "success": {
+                        "headers": [
+                            {
+                                "name": "Content-Type",
+                                "value": "image/png"
+                            }
+                        ],
+                        "code": [
+                            200,404
+                        ],
+                        "schema": {
+                           "blobObject":"Blob"
+                        }
+                    },
+                    "error": {
+                        "headers": [
+                            {
+                                "name": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "code": [
+                            400,
+                            404
+                        ],
+                        "schema": {
+                            "fields": {
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
         "file": {

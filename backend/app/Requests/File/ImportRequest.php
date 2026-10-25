@@ -18,6 +18,7 @@ class ImportRequest extends FormRequest
     {
         return [
             'file.required'=>'Fájl megadása kötelező.',
+            'file.mimetypes'=>'A fájl típusának sima szövegesnek kell lennie.'
         ];
     }
 }

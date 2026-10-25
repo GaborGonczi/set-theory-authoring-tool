@@ -1,0 +1,5 @@
+@for (variable of variables(); track variable.getId()) {
+   <div>
+    <span>{{variable.getName()}} : {{displayValue(variable.getValue())}}</span>
+   </div>
+}
