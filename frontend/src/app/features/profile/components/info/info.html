@@ -1,0 +1,10 @@
+<mat-card class="profile-card">
+  <mat-card-content>
+    <h1>Profil</h1>
+    @if (profileInfo(); as profile) {
+      <p>Felhasználónév: {{ profile.getUsername() }}</p>
+    } @else if (error(); as error) {
+      <p>{{ error }}</p>
+    }
+  </mat-card-content>
+</mat-card>

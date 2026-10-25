@@ -7,6 +7,7 @@ import { Dashboard } from '@src/app/features/dashboard/components/dashboard/dash
 import { Editor } from '@src/app/features/evaluator/components/editor/editor';
 import { FileList } from '@src/app/features/files/components/file-list/file-list';
 import { Usage } from '@src/app/features/help/components/usage/usage';
+import { Info } from '@src/app/features/profile/components/info/info';
 
 export const routes: Routes = [
     {
@@ -30,6 +31,12 @@ export const routes: Routes = [
     {
         path:'help',
         component:Usage,
+        canActivate:[authGuard],
+        data:{sidenav:true}
+    },
+    {
+        path:'profile',
+        component:Info,
         canActivate:[authGuard],
         data:{sidenav:true}
     },
