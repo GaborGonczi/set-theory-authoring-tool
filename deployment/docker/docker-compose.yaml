@@ -1,0 +1,78 @@
+services:
+  frontend:
+    build:
+      context: ../../frontend
+      dockerfile: ./docker/prod/nginx/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      - backend
+    networks:
+      - proxy
+      - stat-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.stat.rule=Host(`www.${DOMAIN}`) || Host(`${DOMAIN}`)"
+      - "traefik.http.routers.stat.entrypoints=web"
+      - "traefik.http.services.stat.loadbalancer.server.port=80"
+
+  backend:
+    build:
+      context: ../../backend
+      dockerfile: ./docker/prod/nginx/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      - php-fpm
+    networks:
+      - stat-network
+    expose:
+      - "80"
+
+  php-fpm:
+    build:
+      context: ../../backend
+      dockerfile: ./docker/prod/php/Dockerfile
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      APP_ENV: production
+      APP_DEBUG: "false"
+      LOG_CHANNEL: stderr
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - stat-network
+    expose:
+      - "9000"
+
+  db:
+    image: mariadb:11.4
+    restart: unless-stopped
+    environment:
+      MARIADB_DATABASE: ${DB_DATABASE}
+      MARIADB_USER: ${DB_USERNAME}
+      MARIADB_PASSWORD: ${DB_PASSWORD}
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    networks:
+      - stat-network
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+volumes:
+  mariadb_data:
+
+networks:
+  proxy:
+    external: true
+    name: proxy
+
+  stat-network:
+    internal: true
