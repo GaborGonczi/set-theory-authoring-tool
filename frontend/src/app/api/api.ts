@@ -61,12 +61,20 @@ const apiDefinition = {
   profile: {
     info: 'info',
   },
+  
+  demo: {
+    up: 'up',
+  },
 } as const;
 
+export const API = {
+ ...createEndpoints(
+    BASE_URL,
+    API_PREFIX,
+    apiDefinition,
+  ),
+  BROADCASTING: {
+    AUTH: `${BASE_URL}/broadcasting/auth`,
+  },
+}
 
-
-export const API = createEndpoints(
-  BASE_URL,
-  API_PREFIX,
-  apiDefinition,
-); 

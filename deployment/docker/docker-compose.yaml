@@ -50,7 +50,56 @@ services:
         ipv4_address: 172.19.0.3
     expose:
       - "9000"
+  
+  scheduler:
+    build:
+      context: ../../backend
+      dockerfile: ./docker/prod/php/Dockerfile
+    restart: unless-stopped
+    init: true
+    command: ["php", "artisan", "schedule:work"]
+    user: www-data
+    env_file:
+      - .env
+    environment:
+      APP_ENV: production
+      APP_DEBUG: "false"
+      LOG_CHANNEL: stderr
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      stat-network:
+        ipv4_address: 172.19.0.6
 
+  reverb:
+    build:
+      context: ../../backend
+      dockerfile: ./docker/prod/php/Dockerfile
+    restart: unless-stopped
+    init: true
+    command: ["php", "artisan", "reverb:start", "--host=0.0.0.0", "--port=8080"]
+    user: www-data
+    env_file:
+      - .env
+    environment:
+      APP_ENV: production
+      APP_DEBUG: "false"
+      LOG_CHANNEL: stderr
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      stat-network:
+        ipv4_address: 172.19.0.7
+    expose:
+      - "8080"
+    healthcheck:
+      test: ["CMD-SHELL", "php -r '$$s=@fsockopen(\"127.0.0.1\", 8080); if ($$s) { fclose($$s); exit(0); } exit(1);'"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
   db:
     image: mariadb:11.4
     restart: unless-stopped

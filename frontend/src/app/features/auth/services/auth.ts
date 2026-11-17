@@ -2,7 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Service } from '@angular/core';
 import { API } from '@src/app/api/api';
 import { User } from '@src/app/features/auth/models/user';
-import { LoginBody, LoginResponse, LogoutResponse, Payload, RegisterBody, RegisterResponse } from '@src/app/features/auth/types/auth';
+import { Reverb } from '@src/app/features/auth/services/reverb';
+import { LoginBody, LoginResponse, GuestLoginResponse, LogoutResponse, Payload, RegisterBody, RegisterResponse } from '@src/app/features/auth/types/auth';
 import { Observable, tap } from 'rxjs';
 
 
@@ -10,6 +11,7 @@ import { Observable, tap } from 'rxjs';
 @Service()
 export class Auth {
   private http = inject(HttpClient);
+  private reverb = inject(Reverb);
 
   private readonly MILISEC_MULTIPLIER = 1000;
 
@@ -22,6 +24,18 @@ export class Auth {
         next: (response) => {
             this.setToken(response.access_token);
             this.setUser(new User(response.user));
+        } 
+      }),
+    );
+  }
+
+  public guestLogin():Observable<GuestLoginResponse> {
+    return this.http.post<GuestLoginResponse>(API.DEMO.UP, null).pipe(
+      tap({
+        next: (response) => {
+            this.setToken(response.access_token);
+            this.setUser(new User(response.user));
+            this.initSession();
         } 
       }),
     );
@@ -41,10 +55,7 @@ export class Auth {
    public logout():Observable<LogoutResponse> {
     return this.http.post<LogoutResponse>(API.AUTH.LOGOUT,null).pipe(
       tap({
-        next: (response) => {
-            this.delToken();
-            this.delUser();
-        } 
+        next: (response) => this.clearSession()
       }),
     );
   }
@@ -71,7 +82,8 @@ export class Auth {
     const payload = this.decodePayload(token);
 
     const isGoodIssuer = payload.iss === API.AUTH.LOGIN ||
-    payload.iss === API.AUTH.REGISTER;
+                         payload.iss === API.AUTH.REGISTER ||
+                         payload.iss === API.DEMO.UP;
     
     if(!isGoodIssuer){
         return false;
@@ -101,5 +113,26 @@ export class Auth {
   private delUser():void {
     sessionStorage.removeItem(this.USER_KEY);
   
+  }
+
+  public clearSession():void {
+    this.delToken();
+    this.delUser();
+  }
+
+  private initSession():void {
+    try {
+      this.reverb.connect(
+        this.getUser().getId(),
+        this.getToken()!,
+        () => {
+          this.clearSession();
+          window.location.reload();
+        }
+      );
+    } 
+    catch (error) {
+      //Reverb initialization failed
+    }
   }
 }

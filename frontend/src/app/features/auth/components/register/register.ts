@@ -18,7 +18,7 @@ export class Register {
 
   public form = new FormGroup({
     username: new FormControl('', {
-      validators: [Validators.required, Validators.minLength(3)],
+      validators: [Validators.required, Validators.minLength(3),Validators.pattern(/^(?!demo_).*/)],
       nonNullable: true,
     }),
     password: new FormControl('', {

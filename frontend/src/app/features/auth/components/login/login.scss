@@ -1,6 +1,6 @@
 .login-container {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 }
@@ -12,4 +12,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.login-container .guest-actions button {
+  width: 100%;
 }

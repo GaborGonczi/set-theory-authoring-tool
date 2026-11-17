@@ -274,7 +274,7 @@
                     }
                 }
             },
-             "get_figure": {
+            "get_figure": {
                 "url": "{{env.baseurl}}/expression/get_figure",
                 "headers": [
                     {
@@ -305,10 +305,11 @@
                             }
                         ],
                         "code": [
-                            200,404
+                            200,
+                            404
                         ],
                         "schema": {
-                           "blobObject":"Blob"
+                            "blobObject": "Blob"
                         }
                     },
                     "error": {
@@ -487,7 +488,8 @@
                             }
                         ],
                         "code": [
-                            201,204
+                            201,
+                            204
                         ],
                         "schema": {
                             "fields": {
@@ -505,7 +507,8 @@
                             }
                         ],
                         "code": [
-                            422,500
+                            422,
+                            500
                         ],
                         "schema": {
                             "fields": {
@@ -638,12 +641,13 @@
                             }
                         ],
                         "code": [
-                            200,404
+                            200,
+                            404
                         ],
                         "schema": {
                             "fields": {
-                                "file":{
-                                    "type":"object<File>"
+                                "file": {
+                                    "type": "object<File>"
                                 },
                                 "message": {
                                     "type": "string"
@@ -770,6 +774,69 @@
                             "fields": {
                                 "user": {
                                     "type": "object<User>"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "demo": {
+            "up": {
+                "url": "{{env.baseurl}}/demo/up",
+                "headers": [
+                    {
+                        "name": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "schema": {
+                        "fields": {}
+                    }
+                },
+                "response": {
+                    "success": {
+                        "headers": [
+                            {
+                                "name": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "code": [
+                            200
+                        ],
+                        "schema": {
+                            "fields": {
+                                "access_token": {
+                                    "type": "string"
+                                },
+                                "token_type": {
+                                    "type": "string"
+                                },
+                                "expires_in": {
+                                    "type": "number"
+                                },
+                                "user": {
+                                    "type": "object<User>"
+                                }
+                            }
+                        }
+                    },
+                    "error": {
+                        "headers": [
+                            {
+                                "name": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "code": [
+                            401
+                        ],
+                        "schema": {
+                            "fields": {
+                                "message": {
+                                    "type": "string"
                                 }
                             }
                         }

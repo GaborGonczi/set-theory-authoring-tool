@@ -16,6 +16,8 @@ export type LoginResponse = {
   user: {id:number,username:string};
 };
 
+export type GuestLoginResponse=LoginResponse;
+
 export type RegisterResponse = {
   access_token: string;
   token_type: string;

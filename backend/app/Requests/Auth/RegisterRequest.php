@@ -10,7 +10,7 @@ class RegisterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'username'=>['required','string','min:3','alpha_num:ascii'],
+            'username'=>['required','string','min:3','alpha_num:ascii','not_regex:/^demo_/'],
             'password'=>['required','string','min:8','confirmed','regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-+]).+$/'],
         ];
     }
@@ -22,6 +22,7 @@ class RegisterRequest extends FormRequest
             'username.string'=>'A felhasználónévnek szövegnek kell lennie.',
             'username.min'=>'A felhasználónév hossza minimum 3 karakter.',
             'username.alpha_num'=>'A felhasználónév csak alfanumerikus karaktereket tartalmazhat.',
+            'username.not_regex'=>'A felhasználónév nem kezdődhet "demo_" előtaggal.',
             'password.required'=>'Jelszó megadása kötelező.',
             'password.string'=>'A jelszónak szövegnek kell lennie.',
             'password.min'=>'A jelszó hossza minimum 8 karakter.',
