@@ -10,7 +10,7 @@
     
   }
   @else {
-    <input id="new" matInput #newInput  (keydown.enter)="sendExpression($event.target.value)" (focus)="storeInput($event.target)"/>
+    <input id="new" matInput #newInput (keydown.enter)="sendExpression($event.target.value)" (focus)="storeInput($event.target)" placeholder="Írj be egy kifejezést!"/>
   }
  
 </div>
