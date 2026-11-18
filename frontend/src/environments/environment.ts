@@ -2,8 +2,8 @@ export const environment = {
     apiUrl:'https://set-theory-at.infosolutions.hu',
     reverb: {
         key: '0pimuimdspyrltzmrxpo',
-        host: 'reverb',
-        port: 8080,
+        host: 'set-theory-at.infosolutions.hu',
+        port: 443,
         scheme:'https'
     }
 };
