@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Service } from '@angular/core';
+import { Router } from '@angular/router';
 import { API } from '@src/app/api/api';
 import { User } from '@src/app/features/auth/models/user';
 import { Reverb } from '@src/app/features/auth/services/reverb';
@@ -12,6 +13,7 @@ import { Observable, tap } from 'rxjs';
 export class Auth {
   private http = inject(HttpClient);
   private reverb = inject(Reverb);
+  private router = inject(Router);
 
   private readonly MILISEC_MULTIPLIER = 1000;
 
@@ -24,6 +26,7 @@ export class Auth {
         next: (response) => {
             this.setToken(response.access_token);
             this.setUser(new User(response.user));
+            this.autoLogout();
         } 
       }),
     );
@@ -36,6 +39,7 @@ export class Auth {
             this.setToken(response.access_token);
             this.setUser(new User(response.user));
             this.initSession();
+            this.autoLogout();
         } 
       }),
     );
@@ -47,6 +51,7 @@ export class Auth {
         next: (response) => {
             this.setToken(response.access_token);
             this.setUser(new User(response.user));
+            this.autoLogout();
         } 
       }),
     );
@@ -134,5 +139,28 @@ export class Auth {
     catch (error) {
       //Reverb initialization failed
     }
+  }
+
+  private autoLogout():void {
+    const token = this.getToken();
+
+    if(!token) {
+      this.clearSession();
+      window.location.reload();
+      return;
+    }
+    
+    const payload = this.decodePayload(token);
+    const delay=payload.exp*this.MILISEC_MULTIPLIER-Date.now();
+
+    setTimeout(() => this.logout().subscribe({
+      next:()=>this.handleLogout(),
+      error:()=>this.handleLogout()
+    }), Math.max(0, delay));
+  }
+
+  private handleLogout():void {
+    this.clearSession();
+    this.router.navigateByUrl('/login')
   }
 }
